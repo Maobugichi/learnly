@@ -13,9 +13,19 @@ const DragQuiz = () => {
       const dragStops = () => {
         isDraggingRef.current = false;
       };
+      const initialBlockPositions = dragDrop.reduce(
+        (acc, item) => ({ ...acc, [item.block]: { x: 0, y: 0 } }),
+        {}
+      );
+
+      const updateBlockPosition = (content, newPosition) => {
+        setBlockPositions((prevPositions) => ({
+          ...prevPositions,
+          [content]: newPosition,
+        }));
+      };
     
-      const validateMatch = useCallback((draggedContent, targetAnswer) => {
-          
+      const validateMatch = useCallback((draggedContent, targetAnswer,e) => {
           const isCorrect = dragDrop.some(
             (item) => item.block === draggedContent && item.piece === targetAnswer
           );         
@@ -27,7 +37,7 @@ const DragQuiz = () => {
           } else {
             setMatches((prevMatches) => ({
               ...prevMatches,
-              [draggedContent]: targetAnswer, // Store the match
+              [draggedContent]: targetAnswer,
             }));
           }
       
@@ -46,11 +56,8 @@ const DragQuiz = () => {
                 content={item.block}
                 position={blockPositions[item.block]}
                 setPosition={(newPosition) =>
-                    setBlockPositions((prevPositions) => ({
-                    ...prevPositions,
-                    [item.block]: newPosition,
-                    }))
-                }
+                    updateBlockPosition(item.block, newPosition)
+                  }
                 isCorrect={isCorrect}
                 correctAnswer={correctAnswer}
                 matches={matches}
@@ -66,12 +73,8 @@ const DragQuiz = () => {
                 onDropCheck={validateMatch}
                 dragStops={dragStops}
                 content={item.piece}
-                setPosition={(newPosition) =>
-                  setBlockPositions((prevPositions) => ({
-                  ...prevPositions,
-                  [item.block]: newPosition,
-                  }))
-              }
+                setPosition={updateBlockPosition}
+                matches={matches}
                />
                ) 
             })}

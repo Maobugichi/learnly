@@ -1,46 +1,25 @@
 import { dragDrop } from "../action";
-import { useRef ,useEffect } from "react";
-const Droppable = ({setIsCorrect,setCorrectAnswer,onDropCheck,dragStops,setPosition,content}) => {
+import { useRef ,useEffect, useState } from "react";
+const Droppable = ({setIsCorrect,setCorrectAnswer,onDropCheck,dragStops,setPosition,content,matches}) => {
     const blockRef = useRef(null)
+    const isMatched = Boolean(matches[content])
     const handleDrop = (e) => {
         e.preventDefault();
         const savedInfo = e.dataTransfer?.getData("text/plain") || e.target.dataset.draggedContent
         if (savedInfo) {
-            const targetRect = e.target.getBoundingClientRect();
-            const centerX = e.clientX
-            const centerY = e.clientY
-            const block = blockRef.current
-            const dropRect = {
-                left: targetRect.left,
-                right: targetRect.right,
-                top: targetRect.top,
-                bottom: targetRect.bottom,
-              };
-
-          
-           
-            if (
-                clientX >= dropRect.left &&
-                clientX <= dropRect.right &&
-                clientY >= dropRect.top &&
-                clientY <= dropRect.bottom
-              )  {
-                const index = dragDrop.findIndex(item => item.block.trim() == savedInfo.trim())
-                const centerX = targetRect.left + targetRect.width / 2 - 50;
-                const centerY = targetRect.top + targetRect.height / 2 - 50;
-              
-          
-                if (dragDrop[index].piece.toString().trim() == e.target.innerText.toString().slice(10).trim() 
-                    && dragDrop[index].block.toString().trim() == savedInfo.toString().trim()) {
-                  
+            const index = dragDrop.findIndex(item => item.block.trim() == savedInfo.trim())
+            if (dragDrop[index].piece.toString().trim() == e.target.innerText.toString().slice(10).trim() 
+                && dragDrop[index].block.toString().trim() == savedInfo.toString().trim()) {
+                    
                     setTimeout(() => {
                         onDropCheck(savedInfo,e.target.innerText.toString().slice(10).trim())
                         //setIsCorrect(false)
+                         
                         setCorrectAnswer(dragDrop[index].block.toString().trim())
                         setPosition(savedInfo, { x: centerX, y: centerY });
                     },1000)
-                   
-                   }
+                
+                } 
 
                 
               } else {
@@ -50,8 +29,6 @@ const Droppable = ({setIsCorrect,setCorrectAnswer,onDropCheck,dragStops,setPosit
           
          
         }
-    }
-
     const allowDrop = (e) => {
         e.preventDefault()
         dragStops()
@@ -59,36 +36,59 @@ const Droppable = ({setIsCorrect,setCorrectAnswer,onDropCheck,dragStops,setPosit
 
     useEffect(() => {
         const handleTouchEnd = (e) => {
-            const target = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
-            //const index = dragDrop.findIndex(item => item.block.trim() == savedInfo.trim())
-            if (target && target.classList.contains("dragable")) {
-              const savedInfo = e.target.dataset.droppable; // Get dragged content from data attribute
-              console.log(e.target.dataset)
-              if (savedInfo) {
-                onDropCheck(savedInfo,e.target.innerText.toString().slice(10).trim())
-                //setIsCorrect(false)
-                //setCorrectAnswer(dragDrop[index].block.toString().trim())
+            const touchX = e.changedTouches[0].clientX;
+            const touchY = e.changedTouches[0].clientY;
+            const target = document.elementFromPoint(touchX, touchY);
+            const draggedBlock = e.target.closest(".dragable");
+           
+            if (draggedBlock) {
+              draggedBlock.style.visibility = "hidden"; // Hide the block
+            }
+            const dropZone = document.elementFromPoint(touchX, touchY)
+            if (draggedBlock) {
+                draggedBlock.style.visibility = "visible"; // Show the block again
+              }
+           
+            if (target && target.classList.contains("dragable") && dropZone && dropZone.classList.contains("droppable")) {
+                 const droppedInfo = dropZone.innerText.slice(10) || dropZone.dataset.droppable
+                 const savedInfo = e.target.dataset.droppable;
+                 const index = dragDrop.findIndex(item => item.block.trim() == savedInfo.trim()) 
+               
+              if (savedInfo && droppedInfo) {
+                if (dragDrop[index].piece.toString().trim() == droppedInfo.toString().trim() && dragDrop[index].block.toString().trim() == savedInfo.toString().trim()) {
+                        
+                    setTimeout(() => {
+                        onDropCheck(savedInfo,e.target.innerText.toString().slice(10).trim())
+                        
+                        setCorrectAnswer(dragDrop[index].block.toString().trim())
+                        //setIsCorrect(false)
+                        setCorrectAnswer(dragDrop[index].block.toString().trim())
+                        //setPosition(savedInfo, { x: centerX, y: centerY });
+                    },1000)
+                   
+                   }
               }
             }
-          };
+    };
           
         document.addEventListener("touchend", handleTouchEnd);
     
         return () => {
             document.removeEventListener("touchend", handleTouchEnd);
     };
-  }, []);
+    }, []);
 
+   
     return (
                 <div
                  ref={blockRef}
-                 className={`droppable bg-purple-100 w-[43%] p-3 text-center lg:w-64 h-20 grid place-items-center rounded-lg border-2 border-dashed border-gray-500`}
+                 className={`${isMatched ? "hidden" : ""} droppable bg-purple-100 w-[43%] p-3 text-center lg:w-64 ${isMatched ? "h-[500px]" : "h-20"} grid place-items-center rounded-lg ${isMatched ? "border-0" : "border-2"} ${isMatched ? null : "border-dashed"} border-gray-500`}
                  onDrop={handleDrop}
                  onDragOver={allowDrop}
                  data-droppable={content}
                 >
                 Drop Here: {content}
-            </div>
+              </div>
         
         )
 }
