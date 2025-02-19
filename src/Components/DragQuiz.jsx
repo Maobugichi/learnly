@@ -33,12 +33,10 @@ const DragQuiz = ({setGoalPoint}) => {
               ...prevMatches,
               [draggedContent]: targetAnswer,
             }));
-            setGoalPoint(prev => {
-              return{
-                ...prev,
-                points:prev.points + 1
-              }
-            })
+            setGoalPoint((prev) => {
+              if (prev.points >= dragDrop.length) return prev; // Prevent exceeding max points
+              return { ...prev, points: prev.points + 1 };
+            });
           
           }  else {
             setDroppedBlocks((prevDroppedBlocks) => ({
@@ -53,6 +51,7 @@ const DragQuiz = ({setGoalPoint}) => {
       },[droppedBlocks])
     return(
         <>
+        <h1 className="text-2xl text-center">drag and match the blocks with the correct ones</h1>
         <div className="w-full  lg:w-[50%] mx-auto h-[300px]  flex flex-wrap justify-center gap-7">
             {dragDrop.map((item) => (
                 <DraggableBlock
