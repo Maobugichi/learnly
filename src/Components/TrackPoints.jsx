@@ -14,7 +14,7 @@ const TrackPoints = ({goalPoint})  => {
             )
 })
     return(
-        <div className="bg-[#6F42C1] text-white flex w-full mx-auto h-24 rounded-lg">
+        <div className="bg-[#6F42C1] text-white flex w-full mx-auto h-20 lg:h-24 rounded-lg">
                {newItems}
          </div>
     )
