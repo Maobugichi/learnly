@@ -1,24 +1,24 @@
 import { dragDrop } from "../action";
 import { useRef ,useEffect, useState } from "react";
-const Droppable = ({setIsCorrect,setCorrectAnswer,onDropCheck,dragStops,setPosition,content,matches}) => {
+const Droppable = ({isDropped,setCorrectAnswer,onDropCheck,dragStops,setPosition,content,matches}) => {
     const blockRef = useRef(null)
     const isMatched = Boolean(matches[content])
+    
     const handleDrop = (e) => {
         e.stopPropagation()
         e.preventDefault();
         const savedInfo = e.dataTransfer?.getData("text/plain") || e.target.dataset.draggedContent
         if (savedInfo) {
+            setTimeout(() => {
+                onDropCheck(savedInfo,e.target.innerText.toString().slice(10).trim())
+              
+                setCorrectAnswer(dragDrop[index].block.toString().trim())
+                setPosition(savedInfo, { x: centerX, y: centerY });
+            },1000)
             const index = dragDrop.findIndex(item => item.block.trim() == savedInfo.trim())
             if (dragDrop[index].piece.toString().trim() == e.target.innerText.toString().slice(10).trim() 
-                && dragDrop[index].block.toString().trim() == savedInfo.toString().trim()) {
-                    
-                    setTimeout(() => {
-                        onDropCheck(savedInfo,e.target.innerText.toString().slice(10).trim())
-                        //setIsCorrect(false)
-                         
-                        setCorrectAnswer(dragDrop[index].block.toString().trim())
-                        setPosition(savedInfo, { x: centerX, y: centerY });
-                    },1000)
+                && dragDrop[index].block.toString().trim() == savedInfo.toString().trim()) { 
+                   
                 
                 } 
 
@@ -36,15 +36,18 @@ const Droppable = ({setIsCorrect,setCorrectAnswer,onDropCheck,dragStops,setPosit
     }
 
     useEffect(() => {
-        let timeoutId;
+    
         const handleTouchEnd = (e) => {
+            e.stopPropagation()
+            e.preventDefault()
             const touchX = e.changedTouches[0].clientX;
             const touchY = e.changedTouches[0].clientY;
             const target = document.elementFromPoint(touchX, touchY);
             const draggedBlock = e.target.closest(".dragable");
-           
+            console.log(draggedBlock)
             if (draggedBlock) {
               draggedBlock.style.visibility = "hidden";
+             
             }
             const dropZone = document.elementFromPoint(touchX, touchY)
             if (draggedBlock) {
@@ -57,15 +60,11 @@ const Droppable = ({setIsCorrect,setCorrectAnswer,onDropCheck,dragStops,setPosit
                  const index = dragDrop.findIndex(item => item.block.trim() == savedInfo.trim()) 
                
               if (savedInfo && droppedInfo) {
+                setTimeout(() => {
+                    onDropCheck(savedInfo,droppedInfo)
+                },1000)
+                if (matches[savedInfo]) return;
                 if (dragDrop[index].piece.toString().trim() == droppedInfo.toString().trim() && dragDrop[index].block.toString().trim() == savedInfo.toString().trim()) {
-                    draggedBlock.removeAttribute("draggable")
-
-                   timeoutId =  setTimeout(() => {
-                        onDropCheck(savedInfo,droppedInfo)
-                        //setCorrectAnswer(dragDrop[index].block.toString().trim())
-                       
-                    },1000)
-                   
                    }
               }
             }
@@ -75,8 +74,6 @@ const Droppable = ({setIsCorrect,setCorrectAnswer,onDropCheck,dragStops,setPosit
     
         return () => {
             document.removeEventListener("touchend", handleTouchEnd);
-            clearTimeout(timeoutId);
-
     };
     }, []);
 
@@ -84,7 +81,7 @@ const Droppable = ({setIsCorrect,setCorrectAnswer,onDropCheck,dragStops,setPosit
     return (
                 <div
                  ref={blockRef}
-                 className={`${isMatched ? "hidden" : ""} droppable bg-purple-100 w-[43%] p-3 text-center lg:w-64 ${isMatched ? "h-[500px]" : "h-20"} grid place-items-center rounded-lg ${isMatched ? "border-0" : "border-2"} ${isMatched ? null : "border-dashed"} border-gray-500`}
+                 className={` droppable bg-purple-100 w-[43%] p-3 text-center lg:w-64    border-2 border-dashed h-20 grid place-items-center rounded-lg  border-gray-500`}
                  onDrop={handleDrop}
                  onDragOver={allowDrop}
                  data-droppable={content}

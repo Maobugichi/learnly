@@ -2,13 +2,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { getCoordinates } from "../action";
 
 
-const DraggableBlock = ({content,position,setPosition,isCorrect,correctAnswer,matches}) => {
+const DraggableBlock = ({content,position,setPosition,isCorrect,correctAnswer,matches,isDropped}) => {
     const isDraggingRef = useRef(null);
     const initialPositionRef = useRef({x:0,y:0});
     const isMatched = Boolean(matches[content])
-    const [isDropped, setIsDropped] = useState(false)
+   
     function dragStart(e) {
-      if (isMatched) return
+      if (isDropped || isMatched ) return
         e.dataTransfer.setData("text/plain",content)
         const {clientX , clientY} = getCoordinates(e)
         initialPositionRef.current = {
@@ -19,7 +19,7 @@ const DraggableBlock = ({content,position,setPosition,isCorrect,correctAnswer,ma
     }
 
   function handleTouchStart(e) {
-    if (isMatched) return
+    if (isDropped || isMatched) return
     if (!isCorrect) return; // Prevent dragging if not allowed
     const { clientX, clientY } = getCoordinates(e);
     initialPositionRef.current = {
@@ -31,7 +31,7 @@ const DraggableBlock = ({content,position,setPosition,isCorrect,correctAnswer,ma
 
   
    function dragContinue(e) {
-     if (!isDraggingRef.current ||   isMatched) return
+     if (!isDraggingRef.current || isDropped ||   isMatched) return
      const {clientX, clientY} = getCoordinates(e)
      setPosition({
         x:clientX - initialPositionRef.current.x,
@@ -41,14 +41,16 @@ const DraggableBlock = ({content,position,setPosition,isCorrect,correctAnswer,ma
 
    function dragStops() {
     isDraggingRef.current = false;
-    setIsDropped(true)
    }
 
    useEffect(() => {
-    document.addEventListener("mousemove", dragContinue);
-    document.addEventListener("touchmove", dragContinue, { passive: false });
-    document.addEventListener("mouseup", dragStops);
-    document.addEventListener("touchend", dragStops);
+    if (!isDropped || !isMatched) {
+      document.addEventListener("mousemove", dragContinue);
+      document.addEventListener("touchmove", dragContinue, { passive: false });
+      document.addEventListener("mouseup", dragStops);
+      document.addEventListener("touchend", dragStops);
+    }
+   
 
     return () => {
       document.removeEventListener("mousemove", dragContinue);
@@ -66,18 +68,22 @@ const DraggableBlock = ({content,position,setPosition,isCorrect,correctAnswer,ma
   return(
     <div className=" relative h-20 w-[44%] bg-gray-100 rounded-xl">
       <div
-      draggable={isDropped ? false : true}
-      style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-        cursor: `${isMatched ? "default" : "move"}`,
-        userSelect: "none",
-        touchAction: "none",
-      }}
+       draggable={!isDropped && !isMatched}
+        style={{
+          left: `${position.x}px`,
+          top: `${position.y}px`,
+          cursor: `${isMatched ? "default" : "move"}`,
+          userSelect: "none",
+          touchAction: "none",
+        }}
         onDragStart={dragStart}
         onTouchStart={handleTouchStart}
         data-droppable={content}
-        className={`dragable  absolute ${isMatched ? ("bg-green-100") : "bg-[#282828]"} ${isMatched ?  "text-black" : "text-white"} text-[0.8rem] p-4 lg:text-sm h-20 w-full text-center grid place-items-center rounded-xl shadow-md  ${isMatched ? "border-2" : null} ${isMatched ? "border-dashed":null}  ${isMatched ? "border-gray-500" : null}`}
+        className={`absolute ${
+          isMatched ? "bg-green-100 text-black" : "bg-[#282828] text-white"
+        } text-[0.8rem] dragable p-4 lg:text-sm h-20 w-full text-center grid place-items-center rounded-xl shadow-md ${
+          isDropped || isMatched ? "border-2 border-dashed border-gray-500" : ""
+        }`}
       >
       {content}
     </div>

@@ -1,6 +1,6 @@
 import DraggableBlock from "./DragAndDrop";
 import Droppable from "./Droppable";
-import { useState ,useCallback } from "react";
+import { useState ,useCallback, useEffect } from "react";
 import { dragDrop } from "../action";
 
 const DragQuiz = ({setGoalPoint}) => {
@@ -23,9 +23,11 @@ const DragQuiz = ({setGoalPoint}) => {
       };
     
       const validateMatch = useCallback((draggedContent, targetAnswer,e) => {
+        console.log("hello worldddd")
           const isCorrect = dragDrop.some(
             (item) => item.block.trim() === draggedContent.trim() && item.piece.trim() === targetAnswer.trim()
           );         
+
           if (isCorrect) {
             setMatches((prevMatches) => ({
               ...prevMatches,
@@ -37,22 +39,18 @@ const DragQuiz = ({setGoalPoint}) => {
                 points:prev.points + 1
               }
             })
-          } else {
-            console.log("hello")
-          }
-          setDroppedBlocks((prevDroppedBlocks) => ({
-            ...prevDroppedBlocks,
-            [draggedContent]: true,
-          }));
-      
-          console.log("Dropped Blocks:", droppedBlocks);
-      
-          setTimeout(() => {
-              setIsDraggingEnabled(prev => !prev);
-            },500)
           
-      },[isCorrect]);
+          }  else {
+            setDroppedBlocks((prevDroppedBlocks) => ({
+              ...prevDroppedBlocks,
+              [draggedContent]: true,
+            }));
+          }
+      },[]);
 
+      useEffect(() => {
+        console.log(droppedBlocks)
+      },[droppedBlocks])
     return(
         <>
         <div className="w-full  lg:w-[50%] mx-auto h-[300px]  flex flex-wrap justify-center gap-7">
@@ -67,6 +65,7 @@ const DragQuiz = ({setGoalPoint}) => {
                 isCorrect={isCorrect}
                 correctAnswer={correctAnswer}
                 matches={matches}
+                isDropped={Boolean(droppedBlocks[item.block])}
                 />
             ))}
         </div>
@@ -81,6 +80,7 @@ const DragQuiz = ({setGoalPoint}) => {
                 content={item.piece}
                 setPosition={updateBlockPosition}
                 matches={matches}
+                isDropped={Boolean(droppedBlocks[item.block])}
                />
                ) 
             })}

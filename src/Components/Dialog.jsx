@@ -2,12 +2,10 @@ import { motion ,AnimatePresence } from "motion/react";
 import Button from "./Button";
 
 const Dialog = ({text,content,color,isWinState,show,setShow,setIsPage,setIsAllow}) => {
-    console.log(isWinState)
     function nextPage() {
         setIsPage(prev => !prev)
         setShow(null)
         setIsAllow(prev => !prev)
-
         setTimeout(() => {
             setIsAllow(prev => !prev)
         },2000)
