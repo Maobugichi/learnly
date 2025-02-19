@@ -4,6 +4,7 @@ const Droppable = ({setIsCorrect,setCorrectAnswer,onDropCheck,dragStops,setPosit
     const blockRef = useRef(null)
     const isMatched = Boolean(matches[content])
     const handleDrop = (e) => {
+        e.stopPropagation()
         e.preventDefault();
         const savedInfo = e.dataTransfer?.getData("text/plain") || e.target.dataset.draggedContent
         if (savedInfo) {
@@ -35,6 +36,7 @@ const Droppable = ({setIsCorrect,setCorrectAnswer,onDropCheck,dragStops,setPosit
     }
 
     useEffect(() => {
+        let timeoutId;
         const handleTouchEnd = (e) => {
             const touchX = e.changedTouches[0].clientX;
             const touchY = e.changedTouches[0].clientY;
@@ -42,11 +44,11 @@ const Droppable = ({setIsCorrect,setCorrectAnswer,onDropCheck,dragStops,setPosit
             const draggedBlock = e.target.closest(".dragable");
            
             if (draggedBlock) {
-              draggedBlock.style.visibility = "hidden"; // Hide the block
+              draggedBlock.style.visibility = "hidden";
             }
             const dropZone = document.elementFromPoint(touchX, touchY)
             if (draggedBlock) {
-                draggedBlock.style.visibility = "visible"; // Show the block again
+                draggedBlock.style.visibility = "visible"; 
               }
            
             if (target && target.classList.contains("dragable") && dropZone && dropZone.classList.contains("droppable")) {
@@ -56,14 +58,12 @@ const Droppable = ({setIsCorrect,setCorrectAnswer,onDropCheck,dragStops,setPosit
                
               if (savedInfo && droppedInfo) {
                 if (dragDrop[index].piece.toString().trim() == droppedInfo.toString().trim() && dragDrop[index].block.toString().trim() == savedInfo.toString().trim()) {
-                        
-                    setTimeout(() => {
-                        onDropCheck(savedInfo,e.target.innerText.toString().slice(10).trim())
-                        
-                        setCorrectAnswer(dragDrop[index].block.toString().trim())
-                        //setIsCorrect(false)
-                        setCorrectAnswer(dragDrop[index].block.toString().trim())
-                        //setPosition(savedInfo, { x: centerX, y: centerY });
+                    draggedBlock.removeAttribute("draggable")
+
+                   timeoutId =  setTimeout(() => {
+                        onDropCheck(savedInfo,droppedInfo)
+                        //setCorrectAnswer(dragDrop[index].block.toString().trim())
+                       
                     },1000)
                    
                    }
@@ -75,6 +75,8 @@ const Droppable = ({setIsCorrect,setCorrectAnswer,onDropCheck,dragStops,setPosit
     
         return () => {
             document.removeEventListener("touchend", handleTouchEnd);
+            clearTimeout(timeoutId);
+
     };
     }, []);
 

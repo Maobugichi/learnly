@@ -6,6 +6,7 @@ const DraggableBlock = ({content,position,setPosition,isCorrect,correctAnswer,ma
     const isDraggingRef = useRef(null);
     const initialPositionRef = useRef({x:0,y:0});
     const isMatched = Boolean(matches[content])
+    const [isDropped, setIsDropped] = useState(false)
     function dragStart(e) {
       if (isMatched) return
         e.dataTransfer.setData("text/plain",content)
@@ -40,6 +41,7 @@ const DraggableBlock = ({content,position,setPosition,isCorrect,correctAnswer,ma
 
    function dragStops() {
     isDraggingRef.current = false;
+    setIsDropped(true)
    }
 
    useEffect(() => {
@@ -64,7 +66,7 @@ const DraggableBlock = ({content,position,setPosition,isCorrect,correctAnswer,ma
   return(
     <div className=" relative h-20 w-[44%] bg-gray-100 rounded-xl">
       <div
-      draggable={isMatched ? false : true}
+      draggable={isDropped ? false : true}
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,

@@ -24,7 +24,9 @@ const HomePage = () => {
               <TrackPoints
                 goalPoint={goalPoints}
               />
-             <DragQuiz/>
+             <DragQuiz
+              setGoalPoint={setGoalPoint}
+             />
               <Quiz
                isWinState={isWinState}
                setisWinState={setisWinState}

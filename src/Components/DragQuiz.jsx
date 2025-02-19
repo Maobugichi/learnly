@@ -3,7 +3,7 @@ import Droppable from "./Droppable";
 import { useState ,useCallback } from "react";
 import { dragDrop } from "../action";
 
-const DragQuiz = () => {
+const DragQuiz = ({setGoalPoint}) => {
     const [blockPositions, setBlockPositions] = useState(
         dragDrop.reduce((acc, item) => ({ ...acc, [item.block]: { x: 0, y: 0 } }), {})
       );
@@ -13,10 +13,7 @@ const DragQuiz = () => {
       const dragStops = () => {
         isDraggingRef.current = false;
       };
-      const initialBlockPositions = dragDrop.reduce(
-        (acc, item) => ({ ...acc, [item.block]: { x: 0, y: 0 } }),
-        {}
-      );
+      const [droppedBlocks, setDroppedBlocks] = useState({});
 
       const updateBlockPosition = (content, newPosition) => {
         setBlockPositions((prevPositions) => ({
@@ -27,25 +24,34 @@ const DragQuiz = () => {
     
       const validateMatch = useCallback((draggedContent, targetAnswer,e) => {
           const isCorrect = dragDrop.some(
-            (item) => item.block === draggedContent && item.piece === targetAnswer
+            (item) => item.block.trim() === draggedContent.trim() && item.piece.trim() === targetAnswer.trim()
           );         
           if (isCorrect) {
             setMatches((prevMatches) => ({
               ...prevMatches,
               [draggedContent]: targetAnswer,
             }));
+            setGoalPoint(prev => {
+              return{
+                ...prev,
+                points:prev.points + 1
+              }
+            })
           } else {
-            setMatches((prevMatches) => ({
-              ...prevMatches,
-              [draggedContent]: targetAnswer,
-            }));
+            console.log("hello")
           }
+          setDroppedBlocks((prevDroppedBlocks) => ({
+            ...prevDroppedBlocks,
+            [draggedContent]: true,
+          }));
+      
+          console.log("Dropped Blocks:", droppedBlocks);
       
           setTimeout(() => {
               setIsDraggingEnabled(prev => !prev);
             },500)
           
-      },[]);
+      },[isCorrect]);
 
     return(
         <>
