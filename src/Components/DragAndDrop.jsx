@@ -79,7 +79,9 @@ const DraggableBlock = ({content,position,setPosition,isCorrect,correctAnswer,ma
         onDragStart={dragStart}
         onTouchStart={handleTouchStart}
         data-droppable={content}
-        className={`absolute ${
+        className={`absolute 
+          ${isDropped && !isMatched ?  "border-3 border-dashed border-gray-500 bg-red-200 text-amber-400": "text-white"}
+          ${
           isMatched ? "bg-green-100 text-black" : "bg-[#282828] text-white"
         } text-[0.8rem] dragable p-4 lg:text-sm h-20 w-full text-center grid place-items-center rounded-xl shadow-md ${
           isDropped || isMatched ? "border-2 border-dashed border-gray-500" : ""

@@ -5,7 +5,6 @@ const Droppable = ({isDropped,setCorrectAnswer,onDropCheck,dragStops,setPosition
     const isMatched = Boolean(matches[content])
     
     const handleDrop = (e) => {
-        e.stopPropagation()
         e.preventDefault();
         const savedInfo = e.dataTransfer?.getData("text/plain") || e.target.dataset.draggedContent
         if (savedInfo) {
@@ -19,9 +18,7 @@ const Droppable = ({isDropped,setCorrectAnswer,onDropCheck,dragStops,setPosition
             if (dragDrop[index].piece.toString().trim() == e.target.innerText.toString().slice(10).trim() 
                 && dragDrop[index].block.toString().trim() == savedInfo.toString().trim()) { 
                    
-                
-                } 
-
+                }
                 
               } else {
                 // Drop event occurred outside the target area
@@ -38,8 +35,8 @@ const Droppable = ({isDropped,setCorrectAnswer,onDropCheck,dragStops,setPosition
     useEffect(() => {
     
         const handleTouchEnd = (e) => {
-            e.stopPropagation()
-            e.preventDefault()
+           
+         
             const touchX = e.changedTouches[0].clientX;
             const touchY = e.changedTouches[0].clientY;
             const target = document.elementFromPoint(touchX, touchY);
@@ -71,10 +68,9 @@ const Droppable = ({isDropped,setCorrectAnswer,onDropCheck,dragStops,setPosition
     };
           
         document.addEventListener("touchend", handleTouchEnd);
-    
         return () => {
             document.removeEventListener("touchend", handleTouchEnd);
-    };
+      };
     }, []);
 
    

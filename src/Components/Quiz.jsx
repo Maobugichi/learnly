@@ -72,7 +72,7 @@ const Quiz = ({isWinState,setisWinState,setGoalPoint}) => {
         })
         if (questions[index]) {
             const correct = questions[index].choose.trim() == e.target.innerText.toString().slice(2).trim()
-            console.log(correct)
+            console.log("hello")
             if (!clickMade) {
                 if (correct) {
                     addClass(e.target,"bg-green-50","border-[green]",".svg");
