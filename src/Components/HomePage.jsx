@@ -15,7 +15,7 @@ const HomePage = () => {
     const [isWinState,setisWinState] = useState(false)
     return(
         <section className="h-auto lg:min-h-[140vh] min-h-[100vh] grid place-items-center">
-          <div className="h-auto lg:min-h-[130vh] min-h-[80vh] w-[90%] mx-auto flex flex-col gap-6  md:min-h-[60] pt-10">
+          <div className="h-auto lg:min-h-[130vh] min-h-[80vh] w-[90%] mx-auto flex flex-col gap-6  md:min-h-[60] pt-10 pb-10">
             <Button
              className="bg-purple-200 w-10 h-10 rounded-full grid place-items-center"
             >
