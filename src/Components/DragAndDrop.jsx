@@ -5,12 +5,12 @@ import { getCoordinates } from "../action";
 const DraggableBlock = ({content,position,setPosition,isCorrect,correctAnswer,matches,isDropped}) => {
     const isDraggingRef = useRef(null);
     const initialPositionRef = useRef({x:0,y:0});
-    const isMatched = Boolean(matches[content])
+    const isMatched = Boolean(matches[content]);
    
     function dragStart(e) {
       if (isDropped || isMatched ) return
-        e.dataTransfer.setData("text/plain",content)
-        const {clientX , clientY} = getCoordinates(e)
+        e.dataTransfer.setData("text/plain",content);
+        const {clientX , clientY} = getCoordinates(e);
         initialPositionRef.current = {
             x: clientX - position.x,
             y: clientY - position.y,
@@ -20,7 +20,7 @@ const DraggableBlock = ({content,position,setPosition,isCorrect,correctAnswer,ma
 
   function handleTouchStart(e) {
     if (isDropped || isMatched) return
-    if (!isCorrect) return; // Prevent dragging if not allowed
+    if (!isCorrect) return; 
     const { clientX, clientY } = getCoordinates(e);
     initialPositionRef.current = {
       x: clientX - position.x,
@@ -32,7 +32,7 @@ const DraggableBlock = ({content,position,setPosition,isCorrect,correctAnswer,ma
   
    function dragContinue(e) {
      if (!isDraggingRef.current || isDropped ||   isMatched) return
-     const {clientX, clientY} = getCoordinates(e)
+     const {clientX, clientY} = getCoordinates(e);
      setPosition({
         x:clientX - initialPositionRef.current.x,
         y: clientY - initialPositionRef.current.y
@@ -81,9 +81,7 @@ const DraggableBlock = ({content,position,setPosition,isCorrect,correctAnswer,ma
         data-droppable={content}
         className={`absolute dragable
           ${isDropped && !isMatched ?  "border-3 border-dashed border-gray-500 bg-red-200 text-amber-400": ""}
-          ${
-          isMatched ? "" : ""
-        } text-[0.8rem] dragable p-4 lg:text-sm h-20 w-full text-center grid place-items-center rounded-xl shadow-md ${
+          text-[0.8rem] dragable p-4 lg:text-sm h-20 w-full text-center grid place-items-center rounded-xl shadow-md ${
           isDropped || isMatched ? "bg-green-100 border-2 border-dashed border-gray-500 text-black" : "bg-[#282828] text-white"
         }`}
       >

@@ -1,5 +1,4 @@
 import {questions,removeClass,capitalize} from "../action";
-import { getAnswer } from "./getAnswer";
 import { useCallback, useEffect, useRef , useState } from "react"
 import Dialog from "./Dialog";
 
@@ -16,13 +15,10 @@ const Quiz = ({isWinState,setisWinState,setGoalPoint}) => {
     const [isAllow,setIsAllow] = useState(false);
     const [width,setWidth] = useState(48)
     const list = listRef.current;
-    
-
       useEffect(() => {
         if (window.innerWidth < 768) {
             setWidth(28)
           } 
-          console.log("hello")
       },[window.innerWidth])
       
       
@@ -44,10 +40,10 @@ const Quiz = ({isWinState,setisWinState,setGoalPoint}) => {
     useEffect(() => {
     
         if (isAllow) {
-            const listArray = Array.from(list.getElementsByTagName("li"))
-            removeClass(listArray)
-            setClickMade(!clickMade)
-            setisWinState(false)
+            const listArray = Array.from(list.getElementsByTagName("li"));
+            removeClass(listArray);
+            setClickMade(!clickMade);
+            setisWinState(false);
         }
     },[isAllow])
     const question = questions.map(question => {
@@ -67,9 +63,9 @@ const Quiz = ({isWinState,setisWinState,setGoalPoint}) => {
        return null
     })
     function addClass(target,color,border,select) {
-            target.classList.add(color, border)
-            target.parentNode.querySelector(select).classList.remove("hidden")
-            setClickMade(prev => !prev)
+            target.classList.add(color, border);
+            target.parentNode.querySelector(select).classList.remove("hidden");
+            setClickMade(prev => !prev);
             setShow("not null")  
     }
 
@@ -78,22 +74,21 @@ const Quiz = ({isWinState,setisWinState,setGoalPoint}) => {
         const listArray = Array.from(list.getElementsByTagName("li"));
         const clickText = e.target.parentNode.parentNode.parentNode.firstElementChild.childNodes[1].innerText.toString();
         const index =  questions.findIndex(item => {
-            return item.question.trim().startsWith(clickText.trim())
+            return item.question.trim().startsWith(clickText.trim());
         })
         if (questions[index]) {
-            const correct = questions[index].choose.trim() == e.target.innerText.toString().slice(2).trim()
-            console.log("hello")
+            const correct = questions[index].choose.trim() == e.target.innerText.toString().slice(2).trim();
             if (!clickMade) {
                 if (correct) {
                     addClass(e.target,"bg-green-50","border-[green]",".svg");
-                    setisWinState(true)
+                    setisWinState(true);
                 } else {
                     addClass(e.target,"bg-red-50","border-[red]",".wrong");                
                     setTimeout(() => {
                         for (const list of listArray) {
                             if (list.innerText.toString().slice(2).trim() == questions[index].choose.trim()) {
-                                list.classList.add("bg-green-50", "border-[green]")
-                                list.parentNode.querySelector(".svg").classList.remove("hidden")
+                                list.classList.add("bg-green-50", "border-[green]");
+                                list.parentNode.querySelector(".svg").classList.remove("hidden");
                             }
                         }
                     },2000)
