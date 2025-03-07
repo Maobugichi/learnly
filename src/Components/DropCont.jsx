@@ -52,7 +52,7 @@ const DropCont = ({isDropZone,setIsDropZone,blockRefs, isVisible,occupiedZones})
     const draggedBlock = dragDrop.map((item,i) => {
         return(
            <motion.div 
-           className="w-[45%]">
+           className="w-[45%] lg:w-[40%]">
            
             <Piece
              key={item.piece}
