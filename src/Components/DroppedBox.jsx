@@ -62,7 +62,7 @@ const Blocks = ({
   },[isInCorrectZone])
   return (
     <motion.div
-      drag={droppedBlocks.includes(content) ? false : drag}
+      drag={drag}
       whileDrag={{scale:0.9}}
       dragElastic={1}
       onDragEnd={handleDragEnd}
