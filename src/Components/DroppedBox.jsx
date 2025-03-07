@@ -27,11 +27,7 @@ const Blocks = ({
         handleDropZone(zone.id);
         setDroppedBlocks((prevDroppedBlocks) => [...prevDroppedBlocks, content]);
         setIsInCorrectZone(true); 
-        const index = dragDrop.findIndex(item => {
-          if (item.block.trim() == zone.content.trim()) {
-            console.log(item.block)
-          }
-          return item.block.trim() == zone.content.trim()});
+        const index = dragDrop.findIndex(item => {return item.block.trim() == zone.content.trim()});
          
         if (dragDrop[index].block == zone.content.trim() && dragDrop[index].piece == e.target.innerText.trim()) {
             e.target.classList.remove("text-white")
@@ -76,7 +72,7 @@ const Blocks = ({
       dragMomentum={false}
       initial={initialPosition}
       animate={isInCorrectZone ? initialPosition : {x:0,y:0}}
-      className={`bg-[#333] transition-colors transition-border duration-700 ease-out text-white h-[80px] rounded-xl border-dashed border-3 grid place-content-center z-20 w-full lg:w-[250px] `}
+      className={`bg-[#333] text-[12px] lg:text-sm transition-colors transition-border duration-700 ease-out text-white h-[80px] rounded-xl border-dashed border-3 grid place-content-center z-20 w-full lg:w-[250px] `}
       style={{ position: "relative" }}
     >
       <p>{content}</p>
