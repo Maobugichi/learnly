@@ -30,6 +30,7 @@ const Blocks = ({
         if (dragDrop[index].block == zone.content.trim() && dragDrop[index].piece == e.target.innerText.trim()) {
             e.target.classList.remove("text-white")
             e.target.classList.add("bg-green-200","text-[black]")
+            alert("helllooooooo")
         } else {
           e.target.classList.remove("text-white")
           e.target.classList.add("bg-red-200","text-[black]")
