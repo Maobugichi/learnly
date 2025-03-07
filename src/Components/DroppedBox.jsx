@@ -28,10 +28,11 @@ const Blocks = ({
         setDroppedBlocks((prevDroppedBlocks) => [...prevDroppedBlocks, content]);
         setIsInCorrectZone(true); 
         const index = dragDrop.findIndex(item => {
-          console.log("block " + " " + item.block)
-          return item.block == zone.content});
-          console.log(zone.content)
-
+          if (item.block.trim() == zone.content.trim()) {
+            console.log(item)
+          }
+          return item.block.trim() == zone.content.trim()});
+         
         if (dragDrop[index].block == zone.content.trim() && dragDrop[index].piece == e.target.innerText.trim()) {
             e.target.classList.remove("text-white")
             e.target.classList.add("bg-green-200","text-[black]")
