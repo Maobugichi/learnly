@@ -12,7 +12,6 @@ const Homepage = () => {
         <div>
            <AnswerCont/>
            <DragQuiz/>
-          
         </div>
     )
 }

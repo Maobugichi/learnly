@@ -31,11 +31,11 @@ const DropCont = ({isDropZone,setIsDropZone,blockRefs, isVisible,occupiedZones})
         
         const validZones = zones.filter((zone) => !occupiedZones.includes(zone.id));
         setDropZones(validZones)
-        setIsDropZone(validZones)
+        //setIsDropZone(validZones)
     }
 
     useEffect(() => {
-      if (isDropZone) {
+      if (dropZones) {
         const dro = dropZones.filter((zone) => !occupiedZones.includes(zone.id));
         setIsDropZone(dro)
       } 
