@@ -27,8 +27,10 @@ const Blocks = ({
         handleDropZone(zone.id);
         setDroppedBlocks((prevDroppedBlocks) => [...prevDroppedBlocks, content]);
         setIsInCorrectZone(true); 
-        const index = dragDrop.findIndex(item => {return item.block == zone.content});
-         console.log(zone.content)
+        const index = dragDrop.findIndex(item => {
+          console.log("block " + " " + item.block)
+          return item.block == zone.content});
+          console.log(zone.content)
 
         if (dragDrop[index].block == zone.content.trim() && dragDrop[index].piece == e.target.innerText.trim()) {
             e.target.classList.remove("text-white")
