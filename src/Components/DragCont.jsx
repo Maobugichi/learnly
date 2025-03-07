@@ -9,7 +9,7 @@ const DragCont = ({isDropZone,blockRefs,dropOnElement,setIsDropOnElement,setDrop
         return(
             <motion.div ref={itemRefs.current[i]}
              style={{ position: 'relative' }}
-             className="bg-gray-200 rounded-xl w-[45%]">
+             className="bg-gray-200 rounded-xl w-[45%] lg:w-[40%]">
                 <Blocks
                  content={item.piece}
                  className="z-20  text-black"
