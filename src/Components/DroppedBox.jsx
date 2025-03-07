@@ -29,7 +29,7 @@ const Blocks = ({
         setIsInCorrectZone(true); 
         const index = dragDrop.findIndex(item => {
           if (item.block.trim() == zone.content.trim()) {
-            console.log(item)
+            console.log(item.block)
           }
           return item.block.trim() == zone.content.trim()});
          
