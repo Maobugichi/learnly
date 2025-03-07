@@ -20,9 +20,10 @@ const Blocks = ({
     const { x, y } = info.point;
     let dropTarget = null;
     dropZones.forEach((zone, i) => {
-      console.log("hello")
+     
       if (x >= zone.left && x <= zone.right && y >= zone.top && y <= zone.bottom) {
         dropTarget = zone;
+        console.log(zone)
         handleDropZone(zone.id);
         setDroppedBlocks((prevDroppedBlocks) => [...prevDroppedBlocks, content]);
         setIsInCorrectZone(true); 
