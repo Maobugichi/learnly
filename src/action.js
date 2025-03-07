@@ -33,29 +33,31 @@ const questions = [
 
 const dragDrop = [{
     id:"zone1",
-    block: "A number that ",
+    block: "A number that multiplies its variable",
     piece:"multiplier"
 },
 {
     id:"zone2",
-    block:"A statement that",
+    block:"A statement that two variables are equal??",
     piece:"Equasion"
 },
 {
     id:"zone3",
-    block:"A combination of",
-    piece:"Expression"
+     block:"A block of code",
+    piece:"function"
+   
 
 },
 {
     id:"zone4",
-    block:"A syntax that data",
+    block:"A syntax that stores data",
     piece:"Object"
 },
 {
     id:"zone5",
-    block:"A block of code",
-    piece:"function"
+     block:"A combination of variables and constant",
+    piece:"Expression"
+   
 },
 ]
 
