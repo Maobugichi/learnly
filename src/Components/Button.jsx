@@ -1,8 +1,8 @@
-const Button = ({children,className,onclick}) => {
+const Button = ({handleNext}) => {
     return(
-       <button onClick={onclick} className={className}>
-        {children}
-       </button> 
+        <button onClick={handleNext}>
+            next page
+        </button>
     )
 }
 

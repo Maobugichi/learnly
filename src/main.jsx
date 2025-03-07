@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom/client";
 import {HashRouter, Route, Routes} from "react-router-dom";
 import "./index.css"
 import { Navigate } from 'react-router-dom'
-import HomePage from "./Components/HomePage";
+import Homepage from "./components/Learnly";
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -11,7 +11,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <HashRouter>
         <Routes>
           <Route path="/" element={<Navigate replace to="/learnly" />} />
-          <Route path="/learnly" element={<HomePage />} />
+          <Route path="/learnly" element={<Homepage />} />
          
         </Routes>
       </HashRouter>

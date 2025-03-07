@@ -1,89 +1,59 @@
-import DraggableBlock from "./DragAndDrop";
-import Droppable from "./Droppable";
-import { useState ,useCallback } from "react";
-import { dragDrop } from "../action";
+import DragCont from "./DragCont";
+import DropCont from "./DropCont";
+import { useState,useRef, useEffect } from "react";
+const DragQuiz = () => {
+  const [isDropZone, setIsDropZone] = useState(null);
+  const [dropOnElement, setIsDropOnElement] = useState(false);
+  const [dropZoneContent, setDropZoneContent] = useState([])
+  const blockRefs = useRef([]);
+  const dropContRefs = useRef([]);
 
-const DragQuiz = ({setGoalPoint}) => {
-    const [blockPositions, setBlockPositions] = useState(
-        dragDrop.reduce((acc, item) => ({ ...acc, [item.block]: { x: 0, y: 0 } }), {})
-      );
-      const [isCorrect,setIsCorrect] = useState(true);
-      const [correctAnswer, setCorrectAnswer] = useState("");
-      const [matches, setMatches] = useState({});
-      const dragStops = () => {
-        isDraggingRef.current = false;
-      };
-      const [droppedBlocks, setDroppedBlocks] = useState({});
-
-      const updateBlockPosition = (content, newPosition) => {
-        setBlockPositions((prevPositions) => ({
-          ...prevPositions,
-          [content]: newPosition,
-        }));
-      };
+  const [filledDropZones, setFilledDropZones] = useState({});
+  const [occupiedZones, setOccupiedZones] = useState([]);
+ 
+  const handleDropZone2 = (dropZoneId) => {
+    setOccupiedZones((prev) => [...prev, dropZoneId]);
     
-      const validateMatch = useCallback((draggedContent, targetAnswer,e) => {
-          const isCorrect = dragDrop.some(
-            (item) => item.block.trim() === draggedContent.trim() && item.piece.trim() === targetAnswer.trim()
-          );         
-          if (isCorrect) {
-            setMatches((prevMatches) => ({
-              ...prevMatches,
-              [draggedContent]: targetAnswer,
-            }));
-            setGoalPoint((prev) => {
-              if (prev.points >= dragDrop.length) return prev; 
-              return { ...prev, points: prev.points + 1 };
-            });
-          
-          }  
-            setDroppedBlocks((prevDroppedBlocks) => ({
-              ...prevDroppedBlocks,
-              [draggedContent]: true,
-            }));
-      },[]);
+  };
+  const handleDropZoneFill = (dropZoneId) => {
+    setFilledDropZones((prev) => ({
+      ...prev,
+      [dropZoneId]: true, // Mark the drop zone as filled
+    }));
+  };
 
-     
+  const onDropContRefs = (refs) => {
+   return dropContRefs.current = refs;
+  };
+
     return(
-        <>
-        <h1 className="text-2xl text-center">drag and match the blocks with the correct ones</h1>
-        <div className="w-full  lg:w-[50%] mx-auto h-[300px]  flex flex-wrap justify-center gap-7">
-            {dragDrop.map((item) => (
-                <DraggableBlock
-                 key={item.block}
-                 content={item.block}
-                 position={blockPositions[item.block]}
-                 setPosition={(newPosition) =>
-                   updateBlockPosition(item.block, newPosition)
-                 }
-                 isCorrect={isCorrect}
-                 correctAnswer={correctAnswer}
-                 matches={matches}
-                 isDropped={Boolean(droppedBlocks[item.block])}
-                />
-            ))}
+        <div className="w-full h-auto min-h-[100vh] lg:min-h-[120vh] grid place-items-center">
+          <DragCont
+           isDropZone={isDropZone}
+           setIsDropZone={setIsDropZone}
+           dropOnElement={dropOnElement}
+           setIsDropOnElement={setIsDropOnElement}
+           blockRefs={blockRefs}
+           dropContRef={dropContRefs}
+           setDropZoneContent={setDropZoneContent}
+           handleDropZone={handleDropZoneFill}
+           handleDropZone2={handleDropZone2}
+           occupiedDropZones={occupiedZones}
+           isVisible={filledDropZones}
+          />
+          <DropCont
+           occupiedZones={occupiedZones}
+           isDropZone={isDropZone}
+           setIsDropZone={setIsDropZone}
+           setIsDropOnElement={setIsDropOnElement}
+           blockRefs={blockRefs}
+           onRef={onDropContRefs}
+           isVisible={filledDropZones}
+
+          />
         </div>
-        <div className="flex  h-[300px] w-full lg:w-[50%] mx-auto flex-wrap-reverse justify-around">
-            {dragDrop.map((item) => {
-               return(
-                <Droppable
-                 setIsCorrect={setIsCorrect}
-                 setCorrectAnswer={setCorrectAnswer}
-                 onDropCheck={validateMatch}
-                 dragStops={dragStops}
-                 content={item.piece}
-                 setPosition={updateBlockPosition}
-                 matches={matches}
-                 isDropped={Boolean(droppedBlocks[item.block])}
-               />
-               ) 
-            })}
-         
-        </div>
-           
-        </>
-        
+      
     )
-}
+}  
 
 export default DragQuiz
