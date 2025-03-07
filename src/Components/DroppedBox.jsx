@@ -20,7 +20,7 @@ const Blocks = ({
     const { x, y } = info.point;
     let dropTarget = null;
     dropZones.forEach((zone, i) => {
-     
+      console.log("hello")
       if (x >= zone.left && x <= zone.right && y >= zone.top && y <= zone.bottom) {
         dropTarget = zone;
         handleDropZone(zone.id);
