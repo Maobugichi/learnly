@@ -27,11 +27,7 @@ const Blocks = ({
         handleDropZone(zone.id);
         setDroppedBlocks((prevDroppedBlocks) => [...prevDroppedBlocks, content]);
         setIsInCorrectZone(true); 
-        const index = dragDrop.findIndex(item => {
-          
-          console.log(item.block)
-          return item.block == zone.content});
-         console.log(index)
+        const index = dragDrop.findIndex(item => {return item.block == zone.content});
          console.log(zone.content)
 
         if (dragDrop[index].block == zone.content.trim() && dragDrop[index].piece == e.target.innerText.trim()) {
