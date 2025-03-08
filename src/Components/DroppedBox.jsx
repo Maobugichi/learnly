@@ -16,6 +16,7 @@ const Blocks = ({
   const [isInCorrectZone, setIsInCorrectZone] = useState(true);
   const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
   
+ 
   const handleDragEnd = (e, info) => {
     const { x, y } = info.point;
     let dropTarget = null;
@@ -30,9 +31,9 @@ const Blocks = ({
         const index = dragDrop.findIndex(item => {return item.block.trim() == zone.content.trim()});
          
         if (dragDrop[index].block == zone.content.trim() && dragDrop[index].piece == e.target.innerText.trim()) {
-            e.target.classList.remove("text-white")
+            e.target.classList.remove("text-white","z-20")
             e.target.classList.add("bg-green-200","text-[black]")
-            
+           
         } else {
           e.target.classList.remove("text-white")
           e.target.classList.add("bg-red-200","text-[black]")
