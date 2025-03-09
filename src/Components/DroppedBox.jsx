@@ -3,14 +3,11 @@ import { useState, useEffect, useRef,useLayoutEffect } from "react";
 import { dragDrop } from "../action";
 const Blocks = ({
   content,
-  className,
   drag,
   dropZones,
   handleDropZone,
-  isVisible,
   droppedBlocks,
   setDroppedBlocks,
-  dropOnElement,
   handleDropZone2
 }) => {
   const [isInCorrectZone, setIsInCorrectZone] = useState(true);
@@ -24,7 +21,6 @@ const Blocks = ({
      
       if (x >= zone.left && x <= zone.right && y >= zone.top && y <= zone.bottom) {
         dropTarget = zone;
-       
         handleDropZone(zone.id);
         setDroppedBlocks((prevDroppedBlocks) => [...prevDroppedBlocks, content]);
         setIsInCorrectZone(true); 
@@ -35,7 +31,7 @@ const Blocks = ({
             e.target.classList.add("bg-green-200","text-[black]")
            
         } else {
-          e.target.classList.remove("text-white")
+          e.target.classList.remove("text-white","z-20")
           e.target.classList.add("bg-red-200","text-[black]")
         }
         handleDropZone2(zone.id);
